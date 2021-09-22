@@ -1,0 +1,129 @@
+import { useState, useEffect } from "react";
+import { fetchImages } from "../services/Api";
+import Button from "./Button/Button";
+import ImageGallery from "./ImageGallery/ImageGallery";
+import Loader from "./Loader/Loader";
+import Modal from "./Modal/Modal";
+import SearchBar from "./Searchbar/Searchbar";
+import css from "../components/Style.module.css";
+
+export default function App() {
+  const [gallery,setGallery] = useState([]);
+  const [currentPage,setCurrentPage] = useState(1);
+  const [searchQuery,setSearchQuery] = useState('');
+  const [query, setQuery] = useState('');
+  const [isLoading,setIsLoading] = useState(false);
+  const [error,setError] = useState(null);
+  const [showModal,setShowModal] = useState(false);
+  const [imageForModal,setImageForModal] = useState('');
+  const [title,setTitle] = useState('');
+}
+
+useEffect(() => {
+  fetchImages({searchQuery:query}).then(setGallery);
+}, [query]);
+
+
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.searchQuery !== this.state.searchQuery) {
+      this.fechImages();
+    }
+
+    window.addEventListener("keydown", this.handleKeyDown);
+  }
+
+  handleKeyDown = (e) => {
+    if (e.code === "Escape") {
+      this.toggleModal();
+      window.removeEventListener("keydown", this.handleKeyDown);
+    }
+  };
+
+  onClickGalleryItem = (src, alt) => {
+    this.toggleModal();
+    this.setState({ imageForModal: src, title: alt });
+  };
+
+  backDroppCloseModal = (event) => {
+    if (event.target === event.currentTarget) {
+      this.toggleModal();
+    }
+  };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
+  const formSubmit = (query) => {
+    setQuery(query);
+    // this.setState({
+    //   searchQuery: query,
+    //   gallery: [],
+    //   currentPage: 1,
+    // });
+  };
+
+function scroll() {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  }
+
+  fechImages = () => {
+    const { currentPage, searchQuery } = this.state;
+    const options = {
+      currentPage,
+      searchQuery,
+      error: null,
+    };
+
+    this.setState({
+      isLoading: true,
+    });
+    fetchImages(options)
+      .then((hits) =>
+        this.setState((prevState) => ({
+          gallery: [...prevState.gallery, ...hits],
+          currentPage: prevState.currentPage + 1,
+        }))
+      )
+      .catch((error) => this.setState({ error }))
+      .finally(() => {
+        {
+          currentPage > 1 && this.scrollTo();
+        }
+        this.setState({
+          isLoading: false,
+        });
+      });
+  };
+
+  render() {
+    const { gallery, isLoading, showModal, imageForModal, title } = this.state;
+    const shouldRenderBtnLoadMore = gallery.length > 0 && !isLoading;
+    return (
+      <>
+        <SearchBar onSubmit={formSubmit} />
+        <ImageGallery
+          gallery={this.state.gallery}
+          onClick={this.toggleModal}
+          onClickImage={this.onClickGalleryItem}
+        />
+        {isLoading && <Loader />}
+        {shouldRenderBtnLoadMore && <Button onClick={this.fechImages} />}
+        {showModal && (
+          <Modal
+            onClickImage={this.backDroppCloseModal}
+            imageForModal={imageForModal}
+            title={title}
+          />
+        )}
+      </>
+    );
+  }
+
+export default App;

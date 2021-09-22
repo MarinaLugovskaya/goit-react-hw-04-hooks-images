@@ -1,0 +1,93 @@
+.Searchbar {
+  display: flex;
+  justify-content: center;
+}
+
+input:hover {
+  box-shadow: inset #26deb0 0 -1px 1px, inset 0 1px 1px #98ffe0,
+    #3caa85 0 0 0 1px;
+}
+
+.SearchForm {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  background-color: #fff;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.SearchForm_button {
+  align-items: center;
+  margin-right: 30px;
+  min-width: 150px;
+  min-height: 50px;
+  margin-top: 20px;
+  position: relative;
+  font-family: Arial, Helvetica, FreeSans, 'Liberation Sans', 'Nimbus Sans L',
+    sans-serif;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: rgb(245, 245, 245);
+  text-shadow: 0 -1px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  user-select: none;
+  padding: 0.3em 1em;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  background: #0c9c89 linear-gradient(#82d18d, #0c9c89);
+  box-shadow: inset #26debf 0 -1px 1px, inset 0 1px 1px #98ffff,
+    #3caa98 0 0 0 1px, rgba(0, 0, 0, 0.103) 0 2px 5px;
+  -webkit-animation: pulsate 1.2s linear infinite;
+  animation: pulsate 1.2s linear infinite;
+}
+
+.SearchForm-button:hover {
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+  cursor: pointer;
+}
+
+@-webkit-keyframes pulsate {
+  50% {
+    color: #fff;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.3), 0 0 5px #ffd, 0 0 8px #fff;
+  }
+}
+
+@keyframes pulsate {
+  50% {
+    color: #fff;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.3), 0 0 5px #ffd, 0 0 8px #fff;
+  }
+}
+
+.button:hover,
+.button:focus {
+  background-color: #9f7330;
+}
+
+.SearchForm_input {
+  margin-top: 20px;
+  margin-right: 50px;
+  min-width: 400px;
+  min-height: 50px;
+  border-radius: 4px;
+  border: 2px solid #3caa3c;
+  box-shadow: #72de26 0 -1px 1px;
+  font-size: 20px;
+  font-weight: 400;
+  text-shadow: 0 -1px rgba(0, 0, 0, 0.1);
+}
+
+.SearchForm_input:hover {
+  box-shadow: inset #72de26 0 -1px 1px, inset 0 1px 1px #98ff98,
+    #3caa3c 0 0 0 1px;
+}
+
+.SearchForm_input::placeholder {
+  font: inherit;
+  font-size: 18px;
+}
