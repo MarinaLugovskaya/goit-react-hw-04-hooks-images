@@ -5,7 +5,7 @@ import css from '../ImageGalleryItem/ImageGalleryItem.module.css';
 export default function ImageGalleryItem({ gallery, onClickGalleryItem }) {
   return (
     <>
-      {gallery.map(({ id, webformatURL, largeImageURL, tags }) => (
+      {gallery.map(({ webformatURL, largeImageURL, tags }) => (
         <li
           key={webformatURL}
           className={css.ImageGalleryItem}

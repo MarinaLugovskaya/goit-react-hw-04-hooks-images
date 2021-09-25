@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { fetchGallery } from '../services/Api';
+
+import fetchGallery from '../services/Api';
 import Button from './Button/Button';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Loader from './Loader/Loader';
@@ -19,21 +20,29 @@ export default function App() {
 
   useEffect(() => {
     if (searchQuery === '') return;
-    fetchGallery({ searchQuery, currentPage })
-      .then(responseHits => {
-        setGallery(prevGallery => [...prevGallery, ...responseHits]);
-        setIsLoading(false);
-        window.scrollTo({
-          top: document.documentElement.scrollHeight,
-          behavior: 'smooth',
-        });
+
+    const options = {
+      currentPage,
+      searchQuery,
+      error: null,
+    };
+
+    fetchGallery(options)
+      .then(hits => setGallery(prevGallery => [...prevGallery, ...hits]))
+      .then(() => {
+        if (currentPage > 1) {
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth',
+          });
+        }
       })
-      .catch(error => setError(error))
+      .catch(error => setError({ error }))
       .finally(() => setIsLoading(false));
   }, [currentPage, searchQuery]);
 
   const formSubmit = query => {
-    setCurrentPage();
+    setCurrentPage(1);
     setGallery([]);
     setError(null);
     setSearchQuery(query);
@@ -60,10 +69,17 @@ export default function App() {
   return (
     <>
       <SearchBar onSubmit={formSubmit} />
+
+      <ImageGallery
+        gallery={gallery}
+        onClickImage={onClickGalleryItem}
+        onClick={toggleModal}
+      />
+
       {isLoading && <Loader />}
 
-      <ImageGallery gallery={gallery} onClickImage={onClickGalleryItem} />
       {shouldRenderBtnLoadMore && <Button onClick={clickMoreBtn} />}
+
       {imageForModal && (
         <Modal onClose={toggleModal}>
           <img src={imageForModal} />
